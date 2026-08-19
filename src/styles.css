@@ -531,8 +531,8 @@
 .team-detail-basic p { max-width: 680px; margin: 10px 0 0; color: var(--duel-muted); }
 .team-detail-title-row, .team-detail-tabs, .team-detail-actions, .team-detail-editor-toolbar, .team-detail-version-card > div, .team-detail-public-version > div { display: flex; align-items: center; }
 .team-detail-title-row { gap: 10px; }
-.team-detail-edit-link { display: grid; width: 34px; height: 34px; place-items: center; color: var(--duel-muted); text-decoration: none; border: 1px solid var(--duel-line); border-radius: var(--duel-radius-xs); }
-.team-detail-edit-link svg { width: 16px; height: 16px; }
+.team-detail-edit-link { display: grid; flex: 0 0 34px; box-sizing: border-box; position: relative; width: 34px; height: 34px; padding: 0; place-items: center; line-height: 1; color: var(--duel-muted); text-decoration: none; border: 1px solid var(--duel-line); border-radius: var(--duel-radius-xs); }
+.team-detail-edit-link svg { display: block; position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; margin: 0; transform: translate(-50%, -50%); }
 .team-detail-composition { font: 600 13px/20px var(--duel-font-code); }
 .team-detail-battle-launch, .team-detail-guest-action { display: grid; gap: 10px; min-width: 210px; }
 .team-detail-battle-launch > p { max-width: 240px; margin: 0; font-size: 12px; }
