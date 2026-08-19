@@ -1,6 +1,6 @@
 {
   "name": "@agentduel/capturetheflag",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reusable AgentDuel capture-the-flag team and battle modules for React applications",
   "license": "Apache-2.0",
   "type": "module",
@@ -19,6 +19,10 @@
     "./team-edit": {
       "types": "./dist/team-edit.d.ts",
       "import": "./dist/team-edit.js"
+    },
+    "./team-list": {
+      "types": "./dist/team-list.d.ts",
+      "import": "./dist/team-list.js"
     },
     "./recent-battles": {
       "types": "./dist/recent-battles.d.ts",

@@ -10,7 +10,7 @@ import type {
 const zhCN = {
   common: { processing: '处理中' },
   dashboard: {
-    sidebar: { dashboard: '控制台', recentBattles: '最近战斗' },
+    sidebar: { dashboard: '控制台', overview: '备战室', captureTheFlag: '夺旗模式', teams: '团队列表', recentBattles: '最近战斗' },
     mode: { captureTheFlag: '夺旗' },
     battleType: { practice: '练习赛', ranked: '排位赛' },
     status: { pending: '等待中', running: '进行中', done: '已完成', error: '异常', canceled: '已取消' },
@@ -59,6 +59,36 @@ const zhCN = {
         '确认哪些战斗已经生成战斗回放'
       ]
     },
+    modePage: {
+      breadcrumbAria: '备战室位置导航',
+      teamsCopy: '按最近有效参战时间排列。团队需要有效自定义代码才能参与夺旗对战。',
+      compiling: '正在编译',
+      status: '状态',
+      record: '排位胜/平/负',
+      unknownModel: '未标注模型'
+    },
+    attention: { title: '需要处理' },
+    submission: {
+      pending_compile: '等待编译',
+      compiling: '编译中',
+      compile_failed: '编译失败',
+      rejected: '已拒绝'
+    },
+    remediation: {
+      status: {
+        name_violation: '名称待整改',
+        description_violation: '简介待整改',
+        all_violation: '资料待整改',
+        suspended: '已停用'
+      }
+    },
+    teams: {
+      create: '新建队伍',
+      openDetail: '查看队伍 {{name}}',
+      empty: '还没有夺旗队伍。创建队伍并提交团队 Agent 后即可开战。'
+    },
+    codeSource: { none: '未提交代码' },
+    stats: { rating: '积分' },
     error: { retry: '重新加载' }
   },
   battleMap: {
@@ -159,7 +189,7 @@ const zhCN = {
 const enUS = {
   common: { processing: 'Processing' },
   dashboard: {
-    sidebar: { dashboard: 'Dashboard', recentBattles: 'Recent battles' },
+    sidebar: { dashboard: 'Dashboard', overview: 'Overview', captureTheFlag: 'Capture the Flag', teams: 'Team list', recentBattles: 'Recent battles' },
     mode: { captureTheFlag: 'Capture the Flag' },
     battleType: { practice: 'Practice', ranked: 'Ranked' },
     status: { pending: 'Pending', running: 'Running', done: 'Done', error: 'Error', canceled: 'Canceled' },
@@ -208,6 +238,36 @@ const enUS = {
         'Checking which battles have replays'
       ]
     },
+    modePage: {
+      breadcrumbAria: 'Dashboard location navigation',
+      teamsCopy: 'Ordered by last valid participation. A team needs an effective custom version to enter capture-the-flag battles.',
+      compiling: 'Compiling',
+      status: 'Status',
+      record: 'Ranked W / D / L',
+      unknownModel: 'Unspecified model'
+    },
+    attention: { title: 'Needs attention' },
+    submission: {
+      pending_compile: 'Waiting to compile',
+      compiling: 'Compiling',
+      compile_failed: 'Compilation failed',
+      rejected: 'Rejected'
+    },
+    remediation: {
+      status: {
+        name_violation: 'Name change required',
+        description_violation: 'Description change required',
+        all_violation: 'Profile changes required',
+        suspended: 'Suspended'
+      }
+    },
+    teams: {
+      create: 'New team',
+      openDetail: 'View team {{name}}',
+      empty: 'No capture-the-flag teams yet. Create a team and submit a team Agent to battle.'
+    },
+    codeSource: { none: 'No code submitted' },
+    stats: { rating: 'Rating' },
     error: { retry: 'Reload' }
   },
   battleMap: {

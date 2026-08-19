@@ -119,6 +119,7 @@ export interface CaptureTheFlagRecentBattlesDataSource {
 }
 
 export interface CaptureTheFlagLinkProps {
+  'aria-label'?: string;
   children: ReactNode;
   className?: string;
   href: string;
@@ -158,6 +159,44 @@ export interface AgentDuelCaptureTheFlagRecentBattlesProps extends CaptureTheFla
   getReplayHref?(battle: CaptureTheFlagBattle): string | null;
   getRevengeHref?(battle: CaptureTheFlagBattle, ownTeamPublicId: string): string | null;
 }
+
+export type TeamListSubmissionStatus = 'pending_compile' | 'compiling' | 'compile_failed' | 'rejected';
+
+export interface TeamListLatestSubmission {
+  version_no: number;
+  status: TeamListSubmissionStatus;
+}
+
+export interface TeamListActiveCode {
+  version_no: number;
+  ai_model: string | null;
+}
+
+export interface TeamListRankedResults {
+  wins: number;
+  draws: number;
+  losses: number;
+}
+
+export interface CaptureTheFlagTeamListItem {
+  public_id: string;
+  name: string;
+  status?: ContentStatus;
+  units: TeamUnit[];
+  created_at: string;
+  active_code: TeamListActiveCode | null;
+  ranked_rating: number;
+  ranked_results: TeamListRankedResults;
+  latest_submission: TeamListLatestSubmission | null;
+}
+
+export type AgentDuelTeamListProps = Omit<CaptureTheFlagModuleProps, 'onUnauthorized'> & {
+  teams: CaptureTheFlagTeamListItem[];
+  createTeamHref?: string;
+  dashboardHref?: string;
+  getTeamHref?(teamPublicId: string): string;
+  renderAiModel?(aiModel: string | null, fallbackLabel: string): ReactNode;
+};
 
 export class CaptureTheFlagApiError extends Error {
   readonly status: number;

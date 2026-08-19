@@ -1,9 +1,9 @@
 import type { ButtonHTMLAttributes, FormEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { CaptureTheFlagLinkComponent } from './types';
+import type { CaptureTheFlagLinkComponent, CaptureTheFlagLinkProps } from './types';
 
-export function DefaultLink({ children, className, href }: { children: ReactNode; className?: string; href: string }) {
-  return <a className={className} href={href}>{children}</a>;
+export function DefaultLink({ children, ...props }: CaptureTheFlagLinkProps) {
+  return <a {...props}>{children}</a>;
 }
 
 export function Breadcrumbs({

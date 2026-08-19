@@ -11,6 +11,7 @@ export default defineConfig({
         index: resolve(import.meta.dirname, 'src/index.ts'),
         'team-create': resolve(import.meta.dirname, 'src/team-create.ts'),
         'team-edit': resolve(import.meta.dirname, 'src/team-edit.ts'),
+        'team-list': resolve(import.meta.dirname, 'src/team-list.ts'),
         'recent-battles': resolve(import.meta.dirname, 'src/recent-battles.ts')
       },
       formats: ['es'],
