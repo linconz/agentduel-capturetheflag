@@ -9,6 +9,7 @@ import {
 } from '@agentduel/component';
 import { useId, useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BattleDateMapMeta } from './BattleDateMapMeta';
 import { Button, ButtonLink, DefaultLink } from './components';
 import { CaptureTheFlagI18nBoundary, normalizeLocale } from './i18n';
 import type {
@@ -94,6 +95,7 @@ export interface AgentDuelTeamOwnerCodeVersionsProps extends TeamDetailBaseProps
 }
 
 interface TeamBattleRecordsSectionProps extends TeamDetailBaseProps {
+  assetBaseUrl?: string;
   battles: readonly CaptureTheFlagBattle[];
   error: string | null;
   getReplayHref?(battle: CaptureTheFlagBattle): string | null;
@@ -151,7 +153,7 @@ function GuestBasic({ challengeHref, linkComponent, showRating = true, team }: A
   const { t } = useTranslation();
   const titleId = useId();
   return (
-    <section className="team-detail-basic" aria-labelledby={titleId}><div><h1 id={titleId}>{team.name}</h1><p className="team-detail-composition">{formatComposition(team.units, t)}</p><p>{team.description || t('teams.detail.noDescription')}</p></div><div className="team-detail-guest-action">{showRating ? <div><span>{t('teams.detail.rating')}</span><strong>{team.ranked_rating}</strong></div> : null}<ButtonLink href={challengeHref} linkComponent={linkComponent}>{t('teams.detail.challengeTeam')}</ButtonLink></div></section>
+    <section className="team-detail-basic" aria-labelledby={titleId}><div><h1 id={titleId}>{team.name}</h1><p className="team-detail-composition">{formatComposition(team.units, t)}</p><p>{team.description || t('teams.detail.noDescription')}</p></div><div className="team-detail-guest-action">{showRating ? <div><span>{t('teams.detail.rating')}</span><strong>{team.ranked_rating}</strong></div> : null}<ButtonLink className="team-detail-battle-button" href={challengeHref} linkComponent={linkComponent}>{t('teams.detail.challengeTeam')}</ButtonLink></div></section>
   );
 }
 
@@ -218,7 +220,7 @@ function CodeVersions(props: AgentDuelTeamOwnerCodeVersionsProps) {
   const titleId = useId();
   const locale = normalizeLocale(props.locale ?? 'zh-CN');
   const versions = useMemo(() => [...(props.codeVersions?.compiled_versions ?? [])].filter((item) => item.is_available).sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)).slice(0, 10), [props.codeVersions]);
-  return <section aria-labelledby={titleId}><Heading id={titleId} title={t('teams.detail.codeVersionsTitle')} />{props.status === 'loading' ? <p>{t('teams.detail.codeVersionsLoading')}</p> : null}{props.status === 'error' ? <ErrorRetry message={t('teams.detail.codeVersionsFailed')} onRetry={props.onRetry} /> : null}{props.status === 'ready' ? <>{props.codeVersions?.latest_submission ? <Submission locale={locale} title={t('teams.detail.latestSubmission')} version={props.codeVersions.latest_submission} /> : null}{props.codeVersions?.latest_problem_submission ? <Submission locale={locale} title={t('teams.detail.latestProblemSubmission')} version={props.codeVersions.latest_problem_submission} /> : null}<h3>{t('teams.detail.compiledVersions')}</h3>{versions.length === 0 ? <p>{t('teams.detail.noCompiledVersions')}</p> : <ol className="team-detail-version-grid">{versions.map((version) => <li key={version.public_id}><VersionCard {...props} locale={locale} version={version} /></li>)}</ol>}{props.error ? <p className="team-detail-error">{props.error}</p> : null}</> : null}</section>;
+  return <section aria-labelledby={titleId}><Heading id={titleId} title={t('teams.detail.codeVersionsTitle')} />{props.status === 'loading' ? <p>{t('teams.detail.codeVersionsLoading')}</p> : null}{props.status === 'error' ? <ErrorRetry message={t('teams.detail.codeVersionsFailed')} onRetry={props.onRetry} /> : null}{props.status === 'ready' ? <>{props.codeVersions?.latest_submission ? <Submission locale={locale} title={t('teams.detail.latestSubmission')} version={props.codeVersions.latest_submission} /> : null}{props.codeVersions?.latest_problem_submission ? <Submission locale={locale} title={t('teams.detail.latestProblemSubmission')} version={props.codeVersions.latest_problem_submission} /> : null}{versions.length === 0 ? <p>{t('teams.detail.noCompiledVersions')}</p> : <ol className="team-detail-version-grid">{versions.map((version) => <li key={version.public_id}><VersionCard {...props} locale={locale} version={version} /></li>)}</ol>}{props.error ? <p className="team-detail-error">{props.error}</p> : null}</> : null}</section>;
 }
 
 function Submission({ locale, title, version }: { locale: string; title: string; version: TeamDetailCodeVersion }) {
@@ -243,10 +245,12 @@ function BattleRecords(props: TeamBattleRecordsSectionProps & { owner?: boolean 
   const { t } = useTranslation();
   const titleId = useId();
   const locale = normalizeLocale(props.locale ?? 'zh-CN');
-  return <section aria-labelledby={titleId}><Heading action={props.moreHref ? <ButtonLink href={props.moreHref} linkComponent={props.linkComponent} size="sm" variant="secondary">{t('dashboard.recent.more')}</ButtonLink> : null} id={titleId} title={t('teams.detail.battleRecordsTitle')} />{props.status === 'loading' && props.battles.length === 0 ? <p>{t('teams.detail.battleRecordsLoading')}</p> : null}{props.status === 'error' && props.battles.length === 0 ? <ErrorRetry message={t('teams.detail.battleRecordsFailed')} onRetry={props.onRetry} /> : null}{props.status !== 'loading' && props.battles.length === 0 ? <p>{t('teams.detail.noBattleRecords')}</p> : null}<div className="team-detail-battle-list">{props.battles.map((battle) => <BattleRow battle={battle} key={battle.public_id} locale={locale} owner={props.owner === true} props={props} />)}</div>{props.error ? <p className="team-detail-error">{props.error}</p> : null}{props.hasMore ? <Button loading={props.status === 'loading'} loadingLabel={t('teams.detail.loadingMoreBattleRecords')} onClick={props.onLoadMore} size="sm" variant="secondary">{t('teams.detail.loadMoreBattleRecords')}</Button> : null}</section>;
+  const assetBaseUrl = props.assetBaseUrl ?? 'https://www.agentduel.app';
+  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  return <section aria-labelledby={titleId}><Heading action={props.moreHref ? <ButtonLink href={props.moreHref} linkComponent={props.linkComponent} size="sm" variant="secondary">{t('dashboard.recent.more')}</ButtonLink> : null} id={titleId} title={t('teams.detail.battleRecordsTitle')} />{props.status === 'loading' && props.battles.length === 0 ? <p>{t('teams.detail.battleRecordsLoading')}</p> : null}{props.status === 'error' && props.battles.length === 0 ? <ErrorRetry message={t('teams.detail.battleRecordsFailed')} onRetry={props.onRetry} /> : null}{props.status !== 'loading' && props.battles.length === 0 ? <p>{t('teams.detail.noBattleRecords')}</p> : null}<div className="dashboard-open-list">{props.battles.map((battle) => <BattleRow assetBaseUrl={assetBaseUrl} battle={battle} dateFormatter={dateFormatter} key={battle.public_id} owner={props.owner === true} props={props} />)}</div>{props.error ? <p className="team-detail-error">{props.error}</p> : null}{props.hasMore ? <div className="character-battle-record-actions"><Button loading={props.status === 'loading'} loadingLabel={t('teams.detail.loadingMoreBattleRecords')} onClick={props.onLoadMore} size="sm" variant="secondary">{t('teams.detail.loadMoreBattleRecords')}</Button></div> : null}</section>;
 }
 
-function BattleRow({ battle, locale, owner, props }: { battle: CaptureTheFlagBattle; locale: string; owner: boolean; props: TeamBattleRecordsSectionProps }) {
+function BattleRow({ assetBaseUrl, battle, dateFormatter, owner, props }: { assetBaseUrl: string; battle: CaptureTheFlagBattle; dateFormatter: Intl.DateTimeFormat; owner: boolean; props: TeamBattleRecordsSectionProps }) {
   const { t } = useTranslation();
   const own = battle.participants.find((item) => item.public_id === props.ownerTeamPublicId);
   const red = battle.participants.find((item) => item.side === 'red');
@@ -255,7 +259,8 @@ function BattleRow({ battle, locale, owner, props }: { battle: CaptureTheFlagBat
   const replay = props.getReplayHref?.(battle) ?? null;
   const revenge = props.getRevengeHref?.(battle) ?? null;
   const match = owner ? getMatchLabel(battle) : null;
-  return <article className="team-detail-battle-row"><div><h3><Participant participant={red} props={props} /> <span>{t('dashboard.recent.vsSeparator')}</span> <Participant participant={blue} props={props} /></h3><p><time>{formatDate(battle.created_at, locale)}</time> · {t(`battleMap.names.${battle.map_id}`, { defaultValue: battle.map_id })}</p></div><div className="team-detail-battle-meta"><AgentDuelBattleTypeBadge battleType={battle.battle_type} label={t(`dashboard.battleType.${battle.battle_type}`)} />{match ? <AgentDuelBattleMatchLabelBadge label={t(match.key)} tone={match.tone} tooltip={t(match.tooltip)} /> : null}<strong className={`is-${result}`}>{t(`dashboard.result.${result}`)}</strong>{battle.battle_type === 'ranked' && own?.rating_delta !== null && own?.rating_delta !== undefined ? <strong className={own.rating_delta >= 0 ? 'is-rating-gain' : 'is-rating-loss'}>{t('dashboard.recent.ratingDelta', { delta: own.rating_delta > 0 ? `+${own.rating_delta}` : own.rating_delta })}</strong> : null}</div><div className="team-detail-actions">{revenge ? <ButtonLink className="team-detail-revenge-button" href={revenge} linkComponent={props.linkComponent} size="sm" variant="secondary">{t('dashboard.challenge.revenge')}</ButtonLink> : null}{replay ? <ButtonLink href={replay} linkComponent={props.linkComponent} size="sm" variant="secondary">{t('dashboard.actions.viewReplay')}</ButtonLink> : <span>{t('dashboard.recent.replayUnavailable')}</span>}</div></article>;
+  const replayLabel = battle.status === 'pending' || battle.status === 'running' ? t('dashboard.active.waiting') : t('dashboard.actions.viewReplay');
+  return <article className="dashboard-battle-row battle-record-row"><div><h3 className="dashboard-battle-title"><Participant participant={red} props={props} /><span className="dashboard-battle-title-separator">{t('dashboard.recent.vsSeparator')}</span><Participant participant={blue} props={props} /></h3><BattleDateMapMeta assetBaseUrl={assetBaseUrl} createdAt={battle.created_at} dateFormatter={dateFormatter} mapId={battle.map_id} /></div><div className="dashboard-battle-meta"><AgentDuelBattleTypeBadge battleType={battle.battle_type} label={t(`dashboard.battleType.${battle.battle_type}`)} />{match ? <AgentDuelBattleMatchLabelBadge label={t(match.key)} tone={match.tone} tooltip={t(match.tooltip)} /> : null}<strong className={`is-${result}`}>{t(`dashboard.result.${result}`)}</strong>{battle.battle_type === 'ranked' && own?.rating_delta !== null && own?.rating_delta !== undefined ? <strong className={own.rating_delta >= 0 ? 'is-rating-gain' : 'is-rating-loss'}>{t('dashboard.recent.ratingDelta', { delta: own.rating_delta > 0 ? `+${own.rating_delta}` : own.rating_delta })}</strong> : null}</div><div className="dashboard-battle-row-actions">{revenge ? <ButtonLink className="character-battle-launch-button battle-revenge-list-button" href={revenge} linkComponent={props.linkComponent} size="sm" variant="secondary">{t('dashboard.challenge.revenge')}</ButtonLink> : null}{replay ? <ButtonLink href={replay} linkComponent={props.linkComponent} size="sm" variant="secondary">{replayLabel}</ButtonLink> : <span className="dashboard-muted-action">{t('dashboard.recent.replayUnavailable')}</span>}</div></article>;
 }
 
 function Participant({ participant, props }: { participant: CaptureTheFlagBattle['participants'][number] | undefined; props: TeamBattleRecordsSectionProps }) {
@@ -263,7 +268,8 @@ function Participant({ participant, props }: { participant: CaptureTheFlagBattle
   const Link = props.linkComponent ?? DefaultLink;
   if (!participant) return <span>{t('teams.detail.unknownOpponent')}</span>;
   const href = participant.name_redacted ? null : props.getTeamHref?.(participant.public_id) ?? null;
-  return href ? <Link className="team-detail-name-link" href={href}>{participant.name}</Link> : <span>{participant.name}</span>;
+  const className = `dashboard-battle-name-link${participant.public_id === props.ownerTeamPublicId ? ' is-own' : ''}`;
+  return href ? <Link className={className} href={href}>{participant.name}</Link> : <span>{participant.name}</span>;
 }
 
 function Heading({ action, id, title }: { action?: ReactNode; id: string; title: string }) { return <div className="team-detail-heading"><h2 id={id}>{title}</h2>{action}</div>; }
