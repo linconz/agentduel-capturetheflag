@@ -144,7 +144,6 @@ export interface AgentDuelTeamCreateProps extends CaptureTheFlagModuleProps {
 }
 
 export interface AgentDuelTeamEditProps extends CaptureTheFlagModuleProps {
-  dashboardHref?: string;
   teamDetailHref?(teamPublicId: string): string;
   teamPublicId: string;
   dataSource: TeamEditDataSource;
@@ -153,7 +152,6 @@ export interface AgentDuelTeamEditProps extends CaptureTheFlagModuleProps {
 
 export interface AgentDuelCaptureTheFlagRecentBattlesProps extends CaptureTheFlagModuleProps {
   assetBaseUrl?: string;
-  dashboardHref?: string;
   dataSource: CaptureTheFlagRecentBattlesDataSource;
   getTeamHref?(teamPublicId: string, view: 'owned' | 'public'): string | null;
   getReplayHref?(battle: CaptureTheFlagBattle): string | null;
@@ -193,10 +191,83 @@ export interface CaptureTheFlagTeamListItem {
 export type AgentDuelTeamListProps = Omit<CaptureTheFlagModuleProps, 'onUnauthorized'> & {
   teams: CaptureTheFlagTeamListItem[];
   createTeamHref?: string;
-  dashboardHref?: string;
   getTeamHref?(teamPublicId: string): string;
   renderAiModel?(aiModel: string | null, fallbackLabel: string): ReactNode;
 };
+
+export type TeamDetailSectionStatus = 'idle' | 'loading' | 'ready' | 'error';
+export type TeamDetailOptimizationTab = 'auto' | 'manual';
+export type TeamCodeSourceKind = 'none' | 'custom';
+export type TeamCodeVersionStatus = 'pending_compile' | 'compiling' | 'compiled' | 'compile_failed' | 'rejected';
+
+export interface TeamDetailOwnerProfile {
+  public_id: string;
+  slot_no: number;
+  name: string;
+  description: string | null;
+  status: ContentStatus;
+  units: TeamUnit[];
+  api_key: string;
+  code_source: TeamCodeSourceKind;
+  ranked_rating: number;
+  ranked_matches: number;
+  ranked_wins: number;
+  ranked_losses: number;
+  ranked_draws: number;
+  updated_at: string;
+}
+
+export interface TeamDetailGuestProfile {
+  name: string;
+  description: string | null;
+  units: TeamUnit[];
+  ranked_rating: number;
+  ranked_wins: number;
+  ranked_draws: number;
+  ranked_losses: number;
+}
+
+export interface TeamCodeDiagnostic {
+  stage: string;
+  code: string | null;
+  message: string;
+  line: number | null;
+  column: number | null;
+}
+
+export interface TeamDetailCodeVersion {
+  public_id: string;
+  version_no: number;
+  status: TeamCodeVersionStatus;
+  diagnostics: TeamCodeDiagnostic[];
+  ai_model: string | null;
+  change_summary: string | null;
+  completed_at: string | null;
+  created_at: string;
+  is_current: boolean;
+  is_available: boolean;
+}
+
+export interface TeamDetailCodeVersions {
+  compiled_versions: TeamDetailCodeVersion[];
+  latest_submission: TeamDetailCodeVersion | null;
+  latest_problem_submission: TeamDetailCodeVersion | null;
+}
+
+export interface TeamDetailGuestVersion {
+  version_no: number;
+  ai_model: string | null;
+  change_summary: string | null;
+}
+
+export interface TeamDetailCodeEditorProps {
+  ariaLabel: string;
+  onChange(sourceCode: string): void;
+  readOnly: boolean;
+  value: string;
+}
+
+export type TeamDetailBaseProps = Omit<CaptureTheFlagModuleProps, 'onUnauthorized'>;
 
 export class CaptureTheFlagApiError extends Error {
   readonly status: number;

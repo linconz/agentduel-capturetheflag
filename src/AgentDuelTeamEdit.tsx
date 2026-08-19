@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs, Button, ButtonLink } from './components';
+import { Button, ButtonLink } from './components';
 import { CaptureTheFlagI18nBoundary, normalizeLocale } from './i18n';
 import { createTeamUpdateInput, getTeamEditFormState } from './teamEditModel';
 import type { AgentDuelTeamEditProps, CaptureTheFlagTeam } from './types';
@@ -20,7 +20,6 @@ export function AgentDuelTeamEdit(props: AgentDuelTeamEditProps) {
 
 function TeamEditContent({
   className,
-  dashboardHref = '/dashboard',
   dataSource,
   linkComponent,
   normalizedLocale,
@@ -121,7 +120,6 @@ function TeamEditContent({
   return (
     <div className={rootClassName} style={style}>
       <TeamEditForm
-        dashboardHref={dashboardHref}
         description={description}
         formError={formError}
         isSaving={isSaving}
@@ -138,7 +136,6 @@ function TeamEditContent({
 }
 
 function TeamEditForm({
-  dashboardHref,
   description,
   formError,
   isSaving,
@@ -150,7 +147,6 @@ function TeamEditForm({
   team,
   teamDetailHref
 }: {
-  dashboardHref: string;
   description: string;
   formError: string | null;
   isSaving: boolean;
@@ -163,11 +159,6 @@ function TeamEditForm({
   teamDetailHref: string;
 }) {
   const { t } = useTranslation();
-  const breadcrumbs = useMemo(() => [
-    { label: t('dashboard.sidebar.dashboard'), href: dashboardHref },
-    { label: team.name, href: teamDetailHref },
-    { label: t('teams.edit.title') }
-  ], [dashboardHref, t, team.name, teamDetailHref]);
   const {
     hasRequiredChange,
     isDescriptionInvalid,
@@ -178,11 +169,6 @@ function TeamEditForm({
 
   return (
     <>
-      <Breadcrumbs
-        ariaLabel={t('teams.edit.breadcrumbAria')}
-        items={breadcrumbs}
-        linkComponent={linkComponent}
-      />
       <section className="character-detail-hero" aria-labelledby="team-edit-title">
         <div>
           <p className="dashboard-kicker">{t('teams.edit.kicker')}</p>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs, Button, ButtonLink } from './components';
+import { Button, ButtonLink } from './components';
 import { CaptureTheFlagI18nBoundary, normalizeLocale } from './i18n';
 import {
   areTeamClassSlotsSelected,
@@ -129,14 +129,6 @@ function TeamCreateContent({
       ) : null}
       {status === 'ready' && context ? (
         <>
-          <Breadcrumbs
-            ariaLabel={t('teams.create.breadcrumbAria')}
-            items={[
-              { label: t('dashboard.sidebar.dashboard'), href: backToDashboardHref },
-              { label: t('teams.create.title') }
-            ]}
-            linkComponent={linkComponent}
-          />
           <section className="character-create-hero" aria-labelledby="team-create-title">
             <div>
               <p className="dashboard-kicker">{t('teams.create.kicker')}</p>

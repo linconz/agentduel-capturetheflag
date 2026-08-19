@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs, ButtonLink, DefaultLink } from './components';
+import { ButtonLink, DefaultLink } from './components';
 import { CaptureTheFlagI18nBoundary, normalizeLocale } from './i18n';
 import type {
   AgentDuelTeamListProps,
@@ -22,7 +22,6 @@ export function AgentDuelTeamList(props: AgentDuelTeamListProps) {
 function TeamListContent({
   className,
   createTeamHref = '/teams/new',
-  dashboardHref = '/dashboard',
   getTeamHref = defaultTeamHref,
   linkComponent,
   normalizedLocale,
@@ -37,15 +36,6 @@ function TeamListContent({
 
   return (
     <div className={rootClassName} style={style}>
-      <Breadcrumbs
-        ariaLabel={t('dashboard.modePage.breadcrumbAria')}
-        items={[
-          { href: dashboardHref, label: t('dashboard.sidebar.overview') },
-          { label: t('dashboard.sidebar.captureTheFlag') },
-          { label: t('dashboard.sidebar.teams') }
-        ]}
-        linkComponent={linkComponent}
-      />
       <section className="mode-list-heading" aria-labelledby="capturetheflag-team-list-title">
         <div>
           <p className="dashboard-kicker">{t('dashboard.sidebar.captureTheFlag')}</p>

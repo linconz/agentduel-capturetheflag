@@ -39,6 +39,21 @@ describe('AgentDuelTeamList', () => {
     expect(html).toContain('4/2/1');
     expect(html).toContain('880');
     expect(html).toContain('aria-label="查看队伍 Flag Ops"');
+    expect(html).not.toContain('duel-breadcrumbs');
+  });
+
+  it('leaves breadcrumb navigation to the host page', () => {
+    const packageRoot = resolve(import.meta.dirname, '..');
+    const componentSources = [
+      'src/AgentDuelCaptureTheFlagRecentBattles.tsx',
+      'src/AgentDuelTeamCreate.tsx',
+      'src/AgentDuelTeamEdit.tsx',
+      'src/AgentDuelTeamList.tsx'
+    ].map((file) => readFileSync(resolve(packageRoot, file), 'utf8'));
+    const styles = readFileSync(resolve(packageRoot, 'src/styles.css'), 'utf8');
+
+    expect(componentSources.join('\n')).not.toContain('Breadcrumbs');
+    expect(styles).not.toContain('.duel-breadcrumbs');
   });
 
   it('shows the no-code state without an active team version', () => {
@@ -53,3 +68,5 @@ describe('AgentDuelTeamList', () => {
     expect(html).not.toContain('Unspecified model');
   });
 });
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';

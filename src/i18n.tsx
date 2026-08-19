@@ -1,6 +1,6 @@
 import { createInstance } from 'i18next';
 import { useEffect, useMemo, type ReactNode } from 'react';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import type {
   CaptureTheFlagI18nMode,
   CaptureTheFlagLocale,
@@ -9,6 +9,10 @@ import type {
 
 const zhCN = {
   common: { processing: '处理中' },
+  badges: {
+    title: '获得的徽章', count: '{{count}} 枚', awardedAt: '获得日期：{{date}}',
+    visibility: { equippedTitle: '佩戴的徽章', hiddenTitle: '隐藏的徽章', visitorHint: '访客视角会看到佩戴的徽章', edit: '修改徽章展示', save: '保存徽章展示', cancel: '取消修改', hide: '隐藏', show: '显示', equippedDropEmpty: '将隐藏的徽章拖到这里佩戴', hiddenDropEmpty: '将佩戴的徽章拖到这里隐藏', dragInstructions: '按空格拿起徽章，使用方向键移动，按空格放下，按 Esc 取消拖拽', dragStarted: '已拿起徽章：{{name}}', dragOverEquipped: '将 {{name}} 移到佩戴的徽章', dragOverHidden: '将 {{name}} 移到隐藏的徽章', draggedToEquipped: '已将 {{name}} 移到佩戴的徽章', draggedToHidden: '已将 {{name}} 移到隐藏的徽章', dragCancelled: '已取消徽章拖拽', saveFailed: '徽章展示保存失败，请重试' }
+  },
   dashboard: {
     sidebar: { dashboard: '控制台', overview: '备战室', captureTheFlag: '夺旗模式', teams: '团队列表', recentBattles: '最近战斗' },
     mode: { captureTheFlag: '夺旗' },
@@ -17,7 +21,7 @@ const zhCN = {
     result: { win: '胜利', loss: '失败', draw: '平局', unresolved: '未结算' },
     active: { waiting: '等待结果' },
     actions: { viewReplay: '战斗回放' },
-    recent: { vsSeparator: 'vs', replayUnavailable: '暂无战斗回放', ratingDelta: '积分 {{delta}}' },
+    recent: { vsSeparator: 'vs', replayUnavailable: '暂无战斗回放', ratingDelta: '积分 {{delta}}', more: '查看全部' },
     challenge: { challenger: '挑战对方', target: '他人挑战', revenge: '一键复仇' },
     matchLabel: {
       randomMatch: '随机匹配',
@@ -60,7 +64,6 @@ const zhCN = {
       ]
     },
     modePage: {
-      breadcrumbAria: '备战室位置导航',
       teamsCopy: '按最近有效参战时间排列。团队需要有效自定义代码才能参与夺旗对战。',
       compiling: '正在编译',
       status: '状态',
@@ -87,7 +90,7 @@ const zhCN = {
       openDetail: '查看队伍 {{name}}',
       empty: '还没有夺旗队伍。创建队伍并提交团队 Agent 后即可开战。'
     },
-    codeSource: { none: '未提交代码' },
+    codeSource: { none: '未提交代码', custom: '自定义 TeamAgent' },
     stats: { rating: '积分' },
     error: { retry: '重新加载' }
   },
@@ -112,7 +115,6 @@ const zhCN = {
   teams: {
     create: {
       pageAria: '新建夺旗队伍',
-      breadcrumbAria: '新建队伍导航',
       loading: '正在读取队伍槽位',
       kicker: 'capture the flag setup',
       title: '新建夺旗队伍',
@@ -149,7 +151,15 @@ const zhCN = {
       }
     },
     detail: {
-      loading: '正在读取队伍详情',
+      loading: '正在读取队伍详情', slot: '队伍槽位 {{slot}}', noDescription: '暂无队伍介绍。', editDescription: '编辑队伍介绍',
+      battleLaunchAria: '发起团队对战', battleTypeTabsAria: '选择对战类型', startBattle: '开始对战', challengeTeam: '挑战他',
+      contentRestrictedBattle: '该队伍存在未恢复的内容违规或缺少可用代码，暂时不能参与对战。', rating: '排位积分', summaryTitle: '团队状态',
+      composition: '职业组合', codeSource: '代码来源', matches: '排位场次', wins: '胜场', draws: '平局', losses: '负场', winRate: '胜率', updatedAt: '更新时间',
+      submitCodeTitle: '提交代码', apiKeyLabel: 'API Key', showApiKey: '显示 Agent API KEY', hideApiKey: '隐藏 Agent API KEY', copyApiKey: '复制 Key', copied: '已复制', rotateApiKey: '重置 Key', rotatingApiKey: '重置中',
+      optimizationTabsAria: '代码提交方式', autoOptimization: '提示词复制', manualOptimization: '手动编辑', copyPrompt: '复制 Prompt', promptCopied: '已复制 Prompt', submitManual: '提交修改', submittingManual: '提交中', sourceLoading: '正在读取当前版本源码。', sourceFailed: '当前版本源码读取失败。', noCurrentSource: '当前没有可显示源码的自定义版本。', promptGuide: { badge: '下一步', title: '把 Prompt 交给第三方 Agent', copy: '把以下 Prompt 复制给第三方 Agent，让它生成并提交这支队伍的对战代码。' },
+      codeVersionsTitle: '代码版本', codeVersionsLoading: '正在读取代码版本。', codeVersionsFailed: '代码版本读取失败。', compiledVersions: '可用版本', latestSubmission: '最近提交', latestProblemSubmission: '最近问题提交', noCompiledVersions: '还没有可用于对战的已编译版本。', versionNo: '版本 {{version}}', currentVersion: '当前使用', setCurrentVersion: '设为当前', settingCurrent: '设置中', noChangeSummary: '未填写变更说明。', unknownModel: '未知模型', viewDiagnostics: '查看 {{count}} 条编译诊断', publicVersionTitle: '当前版本',
+      battleRecordsTitle: '对战记录', battleRecordsLoading: '正在读取对战记录。', battleRecordsFailed: '对战记录读取失败。', noBattleRecords: '当前队伍还没有对战记录。', loadMoreBattleRecords: '加载更多', loadingMoreBattleRecords: '加载中', unknownOpponent: '未知对手',
+      codeVersionStatus: { pending_compile: '等待编译', compiling: '编译中', compiled: '已编译', compile_failed: '编译失败', rejected: '已拒绝' },
       error: {
         kicker: 'team',
         title: '队伍详情无法加载',
@@ -159,7 +169,6 @@ const zhCN = {
     },
     edit: {
       pageAria: '编辑团队资料',
-      breadcrumbAria: '编辑队伍导航',
       kicker: 'team profile',
       title: '编辑团队资料',
       copy: '通常只能调整公开简介；名称被标记需要整改时会临时开放修改。',
@@ -188,6 +197,10 @@ const zhCN = {
 
 const enUS = {
   common: { processing: 'Processing' },
+  badges: {
+    title: 'Earned badges', count: '{{count}} earned', awardedAt: 'Earned: {{date}}',
+    visibility: { equippedTitle: 'Equipped badges', hiddenTitle: 'Hidden badges', visitorHint: 'Visitors can see your equipped badges', edit: 'Edit badge display', save: 'Save badge display', cancel: 'Cancel changes', hide: 'Hide', show: 'Show', equippedDropEmpty: 'Drag a hidden badge here to equip it', hiddenDropEmpty: 'Drag an equipped badge here to hide it', dragInstructions: 'Press Space to pick up a badge, use the arrow keys to move it, press Space to drop it, or press Escape to cancel', dragStarted: 'Picked up badge: {{name}}', dragOverEquipped: 'Move {{name}} to equipped badges', dragOverHidden: 'Move {{name}} to hidden badges', draggedToEquipped: 'Moved {{name}} to equipped badges', draggedToHidden: 'Moved {{name}} to hidden badges', dragCancelled: 'Badge drag cancelled', saveFailed: 'Could not save the badge display. Try again.' }
+  },
   dashboard: {
     sidebar: { dashboard: 'Dashboard', overview: 'Overview', captureTheFlag: 'Capture the Flag', teams: 'Team list', recentBattles: 'Recent battles' },
     mode: { captureTheFlag: 'Capture the Flag' },
@@ -196,7 +209,7 @@ const enUS = {
     result: { win: 'Win', loss: 'Loss', draw: 'Draw', unresolved: 'Unresolved' },
     active: { waiting: 'Waiting' },
     actions: { viewReplay: 'Watch replay' },
-    recent: { vsSeparator: 'vs', replayUnavailable: 'No replay', ratingDelta: 'Rating {{delta}}' },
+    recent: { vsSeparator: 'vs', replayUnavailable: 'No replay', ratingDelta: 'Rating {{delta}}', more: 'View all' },
     challenge: { challenger: 'Challenge opponent', target: 'Challenged by others', revenge: 'Revenge' },
     matchLabel: {
       randomMatch: 'Random match',
@@ -239,7 +252,6 @@ const enUS = {
       ]
     },
     modePage: {
-      breadcrumbAria: 'Dashboard location navigation',
       teamsCopy: 'Ordered by last valid participation. A team needs an effective custom version to enter capture-the-flag battles.',
       compiling: 'Compiling',
       status: 'Status',
@@ -266,7 +278,7 @@ const enUS = {
       openDetail: 'View team {{name}}',
       empty: 'No capture-the-flag teams yet. Create a team and submit a team Agent to battle.'
     },
-    codeSource: { none: 'No code submitted' },
+    codeSource: { none: 'No code submitted', custom: 'Custom TeamAgent' },
     stats: { rating: 'Rating' },
     error: { retry: 'Reload' }
   },
@@ -291,7 +303,6 @@ const enUS = {
   teams: {
     create: {
       pageAria: 'New capture-the-flag team',
-      breadcrumbAria: 'New team navigation',
       loading: 'Loading team slots',
       kicker: 'capture the flag setup',
       title: 'New capture-the-flag team',
@@ -328,7 +339,15 @@ const enUS = {
       }
     },
     detail: {
-      loading: 'Loading team detail',
+      loading: 'Loading team detail', slot: 'Team slot {{slot}}', noDescription: 'No team description.', editDescription: 'Edit team description',
+      battleLaunchAria: 'Start a team battle', battleTypeTabsAria: 'Choose battle type', startBattle: 'Start battle', challengeTeam: 'Challenge',
+      contentRestrictedBattle: 'This team cannot battle while content is restricted or no usable code is available.', rating: 'Ranked rating', summaryTitle: 'Team status',
+      composition: 'Composition', codeSource: 'Code source', matches: 'Ranked matches', wins: 'Wins', draws: 'Draws', losses: 'Losses', winRate: 'Win rate', updatedAt: 'Updated',
+      submitCodeTitle: 'Submit code', apiKeyLabel: 'API Key', showApiKey: 'Show Agent API key', hideApiKey: 'Hide Agent API key', copyApiKey: 'Copy key', copied: 'Copied', rotateApiKey: 'Reset key', rotatingApiKey: 'Resetting',
+      optimizationTabsAria: 'Code submission method', autoOptimization: 'Copy prompt', manualOptimization: 'Edit manually', copyPrompt: 'Copy Prompt', promptCopied: 'Prompt copied', submitManual: 'Submit changes', submittingManual: 'Submitting', sourceLoading: 'Loading current source.', sourceFailed: 'Could not load the current source.', noCurrentSource: 'No custom source is currently available.', promptGuide: { badge: 'Next step', title: 'Send this prompt to your third-party Agent', copy: 'Copy this Prompt to a third-party Agent so it can generate and submit team battle code.' },
+      codeVersionsTitle: 'Code versions', codeVersionsLoading: 'Loading code versions.', codeVersionsFailed: 'Could not load code versions.', compiledVersions: 'Available versions', latestSubmission: 'Latest submission', latestProblemSubmission: 'Latest problem submission', noCompiledVersions: 'No compiled battle version is available yet.', versionNo: 'Version {{version}}', currentVersion: 'Current', setCurrentVersion: 'Set current', settingCurrent: 'Setting', noChangeSummary: 'No change summary.', unknownModel: 'Unknown model', viewDiagnostics: 'View {{count}} diagnostics', publicVersionTitle: 'Current version',
+      battleRecordsTitle: 'Battle records', battleRecordsLoading: 'Loading battle records.', battleRecordsFailed: 'Could not load battle records.', noBattleRecords: 'This team has no battle records.', loadMoreBattleRecords: 'Load more', loadingMoreBattleRecords: 'Loading', unknownOpponent: 'Unknown opponent',
+      codeVersionStatus: { pending_compile: 'Waiting to compile', compiling: 'Compiling', compiled: 'Compiled', compile_failed: 'Compilation failed', rejected: 'Rejected' },
       error: {
         kicker: 'team',
         title: 'Team detail could not load',
@@ -338,7 +357,6 @@ const enUS = {
     },
     edit: {
       pageAria: 'Edit team profile',
-      breadcrumbAria: 'Edit team navigation',
       kicker: 'team profile',
       title: 'Edit team profile',
       copy: 'Normally only the public description can change. Name editing is temporarily unlocked when the name requires remediation.',
@@ -379,8 +397,9 @@ export function CaptureTheFlagI18nBoundary({
   mode?: CaptureTheFlagI18nMode;
 }) {
   const i18n = useMemo(() => {
+    if (mode === 'host') return null;
     const instance = createInstance();
-    void instance.use(initReactI18next).init({
+    void instance.init({
       fallbackLng: 'zh-CN',
       initAsync: false,
       interpolation: { escapeValue: false },
@@ -391,11 +410,12 @@ export function CaptureTheFlagI18nBoundary({
       }
     });
     return instance;
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
+    if (!i18n) return;
     void i18n.changeLanguage(locale);
   }, [i18n, locale]);
 
-  return mode === 'host' ? children : <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+  return mode === 'host' || !i18n ? children : <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 }
