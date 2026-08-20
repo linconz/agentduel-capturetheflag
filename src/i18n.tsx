@@ -41,7 +41,7 @@ const zhCN = {
       kicker: 'battle records',
       title: '对战记录',
       modeTitle: '最近战斗',
-      fixedModeCopy: '仅显示夺旗对局；可继续按对局类型和胜负筛选。',
+      fixedModeCopy: '仅显示夺旗模式对局，可以按对局类型和胜负等信息筛选。',
       filterButton: '筛选',
       filterButtonWithCount: '筛选 {{count}}',
       filterMenuAria: '筛选对战记录',
@@ -64,7 +64,7 @@ const zhCN = {
       ]
     },
     modePage: {
-      teamsCopy: '按最近有效参战时间排列。团队需要有效自定义代码才能参与夺旗对战。',
+      teamsCopy: '按最近参战时间显示。',
       compiling: '正在编译',
       status: '状态',
       record: '排位胜/平/负',

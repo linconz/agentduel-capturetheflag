@@ -39,7 +39,7 @@ function TeamListContent({
     <div className={rootClassName} style={style}>
       <section className="mode-list-heading" aria-labelledby="capturetheflag-team-list-title">
         <div>
-          <p className="dashboard-kicker">{t('dashboard.sidebar.captureTheFlag')}</p>
+          <p className="dashboard-kicker">Capture The Flag</p>
           <h1 id="capturetheflag-team-list-title">{t('dashboard.sidebar.teams')}</h1>
           <p>{t('dashboard.modePage.teamsCopy')}</p>
         </div>
@@ -64,11 +64,7 @@ function TeamListContent({
           title={t('dashboard.attention.title')}
         />
       ) : null}
-      <section className="mode-list-section" aria-labelledby="capturetheflag-team-list-section-title">
-        <div className="dashboard-section-heading">
-          <h2 id="capturetheflag-team-list-section-title">{t('dashboard.sidebar.teams')}</h2>
-          <span className="mode-list-count">{teams.length}</span>
-        </div>
+      <section className="mode-list-section">
         {teams.length === 0 ? (
           <div className="mode-list-empty"><p>{t('dashboard.teams.empty')}</p></div>
         ) : (
