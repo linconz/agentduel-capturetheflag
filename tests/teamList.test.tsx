@@ -31,7 +31,7 @@ describe('AgentDuelTeamList', () => {
       />
     );
 
-    expect(html).toContain('<p class="dashboard-kicker">Capture The Flag</p>');
+    expect(html).toContain('<p class="dashboard-kicker">capture the flag</p>');
     expect(html).not.toContain('夺旗模式');
     expect(html).not.toContain('capturetheflag-team-list-section-title');
     expect(html).not.toContain('mode-list-count');

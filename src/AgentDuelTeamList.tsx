@@ -39,7 +39,7 @@ function TeamListContent({
     <div className={rootClassName} style={style}>
       <section className="mode-list-heading" aria-labelledby="capturetheflag-team-list-title">
         <div>
-          <p className="dashboard-kicker">Capture The Flag</p>
+          <p className="dashboard-kicker">capture the flag</p>
           <h1 id="capturetheflag-team-list-title">{t('dashboard.sidebar.teams')}</h1>
           <p>{t('dashboard.modePage.teamsCopy')}</p>
         </div>
