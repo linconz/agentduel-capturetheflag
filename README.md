@@ -38,7 +38,7 @@ import '@agentduel/capturetheflag/styles.css';
 />
 ```
 
-备战室列表由宿主传入已经获取的团队摘要，组件负责标题、状态分区和列表展示。面包屑由宿主在页面层组合，宿主也可注入 AI 模型徽标渲染器：
+备战室列表由宿主传入已经获取的团队摘要，组件负责标题、状态分区、列表展示及 AI 模型图标。面包屑由宿主在页面层组合；如需自定义模型展示，仍可通过 `renderAiModel` 覆盖默认公共组件：
 
 ```tsx
 import { AgentDuelTeamList } from '@agentduel/capturetheflag/team-list';
@@ -48,8 +48,5 @@ import '@agentduel/capturetheflag/styles.css';
   teams={dashboardSummary.teams}
   getTeamHref={(publicId) => `/teams/${publicId}`}
   locale="zh-CN"
-  renderAiModel={(aiModel, fallbackLabel) => (
-    <AiModelBadge aiModel={aiModel} fallbackLabel={fallbackLabel} />
-  )}
 />
 ```

@@ -1,3 +1,4 @@
+import { AgentDuelAiModelLogoBadge } from '@agentduel/component';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ButtonLink, DefaultLink } from './components';
@@ -165,7 +166,12 @@ function TeamRow({
               <span>v{team.active_code.version_no}</span>
               {renderAiModel
                 ? renderAiModel(team.active_code.ai_model, fallbackModelLabel)
-                : <span>{team.active_code.ai_model?.trim() || fallbackModelLabel}</span>}
+                : (
+                  <AgentDuelAiModelLogoBadge
+                    aiModel={team.active_code.ai_model}
+                    fallbackLabel={fallbackModelLabel}
+                  />
+                )}
             </strong>
           ) : <strong>{t('dashboard.codeSource.none')}</strong>}
         </div>

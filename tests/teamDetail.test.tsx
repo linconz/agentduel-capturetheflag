@@ -62,7 +62,7 @@ describe('team detail sections', () => {
 
     const versions = Array.from({ length: 12 }, (_, index) => ({
       public_id: `version-${index}`, version_no: index + 1, status: 'compiled' as const, diagnostics: [],
-      ai_model: null, change_summary: `Summary ${index + 1}`, completed_at: null,
+      ai_model: index === 11 ? 'DeepSeek-R1' : null, change_summary: `Summary ${index + 1}`, completed_at: null,
       created_at: `2026-08-${String(index + 1).padStart(2, '0')}T00:00:00.000Z`, is_current: false, is_available: true
     }));
     const versionsHtml = renderToStaticMarkup(createElement(AgentDuelTeamOwnerCodeVersions, {
@@ -74,6 +74,7 @@ describe('team detail sections', () => {
     expect(versionsHtml).toContain('Summary 12');
     expect(versionsHtml).not.toContain('>Summary 1<');
     expect(versionsHtml).not.toContain('可用版本');
+    expect(versionsHtml).toContain('src="https://www.agentduel.app/model/logos/deepseek.svg"');
   });
 
   it('reuses the recent battle row and map tooltip presentation', () => {

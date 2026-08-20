@@ -67,6 +67,16 @@ describe('AgentDuelTeamList', () => {
     expect(html).toContain('No code submitted');
     expect(html).not.toContain('Unspecified model');
   });
+
+  it('renders the shared model logo by default', () => {
+    const html = renderToStaticMarkup(
+      <AgentDuelTeamList locale="en-US" teams={[createTeam()]} />
+    );
+
+    expect(html).toContain('class="ai-model-logo-badge has-logo"');
+    expect(html).toContain('src="https://www.agentduel.app/model/logos/chatgpt.svg"');
+    expect(html).toContain('<span>GPT-5</span>');
+  });
 });
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';

@@ -1,4 +1,5 @@
 import {
+  AgentDuelAiModelLogoBadge,
   AgentDuelBadgeGallery,
   AgentDuelBattleMatchLabelBadge,
   AgentDuelBattleTypeBadge,
@@ -231,14 +232,14 @@ function Submission({ locale, title, version }: { locale: string; title: string;
 function VersionCard(props: AgentDuelTeamOwnerCodeVersionsProps & { locale: string; version: TeamDetailCodeVersion }) {
   const { t } = useTranslation();
   const v = props.version;
-  return <article className={`team-detail-version-card${v.is_current ? ' is-current' : ''}`}><div className="character-version-card-header"><strong>{t('teams.detail.versionNo', { version: v.version_no })}</strong>{v.is_current ? <span>{t('teams.detail.currentVersion')}</span> : null}</div><p>{v.change_summary || t('teams.detail.noChangeSummary')}</p><div className="team-detail-version-meta">{props.renderAiModel?.(v.ai_model, t('teams.detail.unknownModel')) ?? <span>{v.ai_model || t('teams.detail.unknownModel')}</span>}<time>{formatDate(v.completed_at ?? v.created_at, props.locale)}</time></div><Button disabled={v.is_current} loading={props.settingVersionId === v.public_id} loadingLabel={t('teams.detail.settingCurrent')} onClick={() => props.onSetCurrentVersion(v.public_id)} size="sm" variant="secondary" width="full">{v.is_current ? t('teams.detail.currentVersion') : t('teams.detail.setCurrentVersion')}</Button></article>;
+  return <article className={`team-detail-version-card${v.is_current ? ' is-current' : ''}`}><div className="character-version-card-header"><strong>{t('teams.detail.versionNo', { version: v.version_no })}</strong>{v.is_current ? <span>{t('teams.detail.currentVersion')}</span> : null}</div><p>{v.change_summary || t('teams.detail.noChangeSummary')}</p><div className="team-detail-version-meta">{props.renderAiModel?.(v.ai_model, t('teams.detail.unknownModel')) ?? <AgentDuelAiModelLogoBadge aiModel={v.ai_model} fallbackLabel={t('teams.detail.unknownModel')} />}<time>{formatDate(v.completed_at ?? v.created_at, props.locale)}</time></div><Button disabled={v.is_current} loading={props.settingVersionId === v.public_id} loadingLabel={t('teams.detail.settingCurrent')} onClick={() => props.onSetCurrentVersion(v.public_id)} size="sm" variant="secondary" width="full">{v.is_current ? t('teams.detail.currentVersion') : t('teams.detail.setCurrentVersion')}</Button></article>;
 }
 
 function GuestVersion({ renderAiModel, version }: AgentDuelTeamGuestCurrentVersionProps) {
   const { t } = useTranslation();
   const titleId = useId();
   if (!version) return null;
-  return <section aria-labelledby={titleId}><Heading id={titleId} title={t('teams.detail.publicVersionTitle')} /><article className="team-detail-public-version"><div><strong>{t('teams.detail.versionNo', { version: version.version_no })}</strong>{renderAiModel?.(version.ai_model, t('teams.detail.unknownModel')) ?? <span>{version.ai_model || t('teams.detail.unknownModel')}</span>}</div><p>{version.change_summary || t('teams.detail.noChangeSummary')}</p></article></section>;
+  return <section aria-labelledby={titleId}><Heading id={titleId} title={t('teams.detail.publicVersionTitle')} /><article className="team-detail-public-version"><div><strong>{t('teams.detail.versionNo', { version: version.version_no })}</strong>{renderAiModel?.(version.ai_model, t('teams.detail.unknownModel')) ?? <AgentDuelAiModelLogoBadge aiModel={version.ai_model} fallbackLabel={t('teams.detail.unknownModel')} />}</div><p>{version.change_summary || t('teams.detail.noChangeSummary')}</p></article></section>;
 }
 
 function BattleRecords(props: TeamBattleRecordsSectionProps & { owner?: boolean }) {
