@@ -1,8 +1,10 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   AgentDuelTeamGuestBasic,
+  AgentDuelTeamGuestBattleRecords,
   AgentDuelTeamOwnerBasic,
   AgentDuelTeamOwnerCodeSubmission,
   AgentDuelTeamOwnerCodeVersions,
@@ -34,6 +36,7 @@ describe('team detail sections', () => {
     expect(html).toContain('/challenge');
     expect(html).toContain('930');
     expect(html).toContain('Challenge');
+    expect(html).toContain('team-detail-battle-button');
   });
 
   it('renders detailed owner match statistics', () => {
@@ -48,7 +51,7 @@ describe('team detail sections', () => {
       activeTab: 'manual', apiKey: 'secret-key', apiKeyError: null, apiKeyVisible: false,
       copiedApiKey: false, copiedPrompt: false, isRotatingApiKey: false, isSubmitting: false,
       manualSourceCode: 'export default 1', manualSubmitError: null, manualSubmitNotice: null,
-      prompt: 'Prompt', sourceStatus: 'ready', locale: 'en-US',
+      prompt: 'First line\nSecond line', sourceStatus: 'ready', locale: 'en-US',
       onCopyApiKey: () => undefined, onCopyPrompt: () => undefined,
       onManualSourceCodeChange: () => undefined, onRotateApiKey: () => undefined,
       onSubmitManualCode: () => undefined, onTabChange: () => undefined, onToggleApiKey: () => undefined,
@@ -70,5 +73,38 @@ describe('team detail sections', () => {
     expect((versionsHtml.match(/team-detail-version-card/g) ?? []).length).toBe(10);
     expect(versionsHtml).toContain('Summary 12');
     expect(versionsHtml).not.toContain('>Summary 1<');
+    expect(versionsHtml).not.toContain('可用版本');
+  });
+
+  it('reuses the recent battle row and map tooltip presentation', () => {
+    const html = renderToStaticMarkup(createElement(AgentDuelTeamGuestBattleRecords, {
+      battles: [{
+        public_id: 'battle-1', share_path: '/b/one', battle_type: 'ranked', game_mode_id: 'captureTheFlag',
+        map_id: 'bannerhold_heights', status: 'done', winner_side: 'blue', replay_available: true,
+        created_at: '2026-08-01T00:00:00.000Z', participants: [
+          { side: 'red', kind: 'team', public_id: 'team-1', name: 'Flag Ops', rating_delta: -8 },
+          { side: 'blue', kind: 'team', public_id: 'team-2', name: 'Banner Guard', rating_delta: 8 }
+        ]
+      }],
+      error: null, hasMore: true, ownerTeamPublicId: 'team-1', status: 'ready',
+      getReplayHref: () => '/replays/one', getTeamHref: (publicId) => `/teams/${publicId}`,
+      onLoadMore: () => undefined
+    }));
+    expect(html).toContain('dashboard-battle-row battle-record-row');
+    expect(html).toContain('battle-map-label');
+    expect(html).toContain('battle-map-tooltip');
+    expect(html).toContain('character-battle-record-actions');
+  });
+
+  it('keeps prompt line breaks and fixes only the manual editor at 400px', () => {
+    const styles = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
+    expect(styles).toMatch(/\.team-detail-prompt\s*\{[^}]*white-space:\s*pre-wrap/s);
+    expect(styles).toMatch(/\.team-detail-code-editor\s*\{[^}]*height:\s*400px/s);
+  });
+
+  it('keeps the guest challenge link the same compact brown button as start battle', () => {
+    const styles = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
+    expect(styles).toMatch(/\.team-detail-guest-action\s*\{[^}]*width:\s*max-content[^}]*min-width:\s*0/s);
+    expect(styles).toMatch(/\.team-detail-guest-action\s*>\s*a\.duel-button\.team-detail-battle-button\s*\{[^}]*width:\s*auto[^}]*color:\s*var\(--duel-surface\)/s);
   });
 });
